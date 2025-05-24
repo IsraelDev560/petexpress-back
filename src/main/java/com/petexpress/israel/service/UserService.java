@@ -19,11 +19,11 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(User user) {
-        if (this.userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new UserExceptions.ResourceAlreadyExistsException(
-                    "Usuário com e-mail " + user.getEmail() + " já cadastrado."
-            );
-        }
+//        if (this.userRepository.findByUsername(user.getUsername()).) {
+//            throw new UserExceptions.ResourceAlreadyExistsException(
+//                    "Usuário com username já cadastrado."
+//            );
+//        }
         return userRepository.save(user);
     }
 
@@ -37,11 +37,14 @@ public class UserService {
 
     @Transactional
     public User updateUser(UUID id, UserUpdateDto dto) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserExceptions.ResourceNotFoundException("Usuario não encontrado" + id));
-        user.setEmail(dto.getEmail());
-        user.setUsername(dto.getUsername());
-        user.setRole(User.Role.valueOf(dto.getRole()));
-        return userRepository.save(user);
+        try {
+            User user = userRepository.getReferenceById(id);
+            user.setUsername(dto.username());
+            user.setRole(dto.role());
+            return userRepository.save(user);
+        } catch (UserExceptions.ResourceNotFoundException exception) {
+            throw new UserExceptions.ResourceNotFoundException("Usuario não encontrado");
+        }
     }
 
     public void deleteUser(UUID id) {

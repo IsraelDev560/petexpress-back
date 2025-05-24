@@ -1,12 +1,10 @@
 package com.petexpress.israel.dto.update;
 
+import com.petexpress.israel.entities.User;
 import lombok.Data;
 
-@Data
-public class UserUpdateDto {
+import java.util.Collection;
 
-    private String email;
-    private String username;
-    private String role;
 
+public record UserUpdateDto(String username, User.Role role, Collection<?> authorities) {
 }

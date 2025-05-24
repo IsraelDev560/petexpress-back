@@ -1,20 +1,11 @@
 package com.petexpress.israel.dto.res;
 
 import com.petexpress.israel.entities.User;
-import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserResponseDto {
-    private String username;
-    private String email;
-    private String role;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
-    public UserResponseDto(User user) {
-        this.username = user.getUsername();
-        this.email = user.getEmail();
-        this.role = String.valueOf(user.getRole());
-    }
+
+public record UserResponseDto(UUID id, String username, User.Role role, Collection<?> authorities, boolean enabled) {
 }
