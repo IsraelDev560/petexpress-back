@@ -4,7 +4,8 @@ package com.petexpress.israel.exceptions;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -12,26 +13,49 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-DD HH:mm:ss"));
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handlerException(Exception exception) {
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Ocorreu um erro inesperado.", time);
-        return ResponseEntity.status(errorResponseDto.status()).body(errorResponseDto);
+    private String timestamp() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    @ExceptionHandler(UserExceptions.ResourceNotFoundException.class)
-    private ResponseEntity<ErrorResponseDto> userNotFoundException(UserExceptions.ResourceNotFoundException exception){
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), "Esse usuário não existe.", time);
-        return ResponseEntity.status(errorResponseDto.status()).body(errorResponseDto);
+    @ExceptionHandler(org.springframework.security.core.userdetails.UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> usernameNotFoundException(org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+        var error = new ErrorResponseDto(401, "Usuário ou senha inválidos.", timestamp());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(UserExceptions.ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> userAlreadyExistsException(UserExceptions.ResourceAlreadyExistsException ex) {
+        var error = new ErrorResponseDto(HttpStatus.CONFLICT.value(), ex.getMessage(), timestamp());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UserExceptions.UnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> unauthorizedException(UserExceptions.UnauthorizedException ex) {
+        var error = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), timestamp());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler({
+            org.springframework.security.authentication.BadCredentialsException.class
+    })
+    public ResponseEntity<ErrorResponseDto> authenticationException(Exception ex) {
+        logger.error("Erro de autenticação", ex);
+        var error = new ErrorResponseDto(401, "Usuário ou senha inválidos.", timestamp());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(JWTVerificationException.class)
-    public ResponseEntity<ErrorResponseDto> unauthorizedUser(JWTVerificationException exception){
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Unauthorized", time);
-        return ResponseEntity.status(errorResponseDto.status()).body(errorResponseDto);
+    public ResponseEntity<ErrorResponseDto> jwtVerificationException(JWTVerificationException ex) {
+        var error = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Token inválido ou expirado.", timestamp());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDto> genericException(Exception ex) {
+        var error = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Erro interno do servidor.", timestamp());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

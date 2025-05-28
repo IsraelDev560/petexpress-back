@@ -6,16 +6,17 @@ import com.petexpress.israel.dto.res.UserResponseDto;
 import com.petexpress.israel.entities.User;
 import com.petexpress.israel.security.SecurityConfig;
 import com.petexpress.israel.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("users")
@@ -26,6 +27,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Buscar todos usuários")
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         var users = userService.getAllUsers()
@@ -35,18 +37,25 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @Operation(summary = "Buscar usuário por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<Stream<UserResponseDto>> getUserById(@Valid UUID id) {
-        Stream<UserResponseDto> user = userService.getUserById(id).stream().map(u -> new UserResponseDto(u.getId(), u.getUsername(), u.getRole(), u.getAuthorities(), u.isEnabled()));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.getAuthorities(), user.isEnabled()));
     }
 
+    @Operation(summary = "Atualizar um usuário por ID")
     @PatchMapping("/{id}")
     public ResponseEntity<UserUpdateResponseDto> updateUser(@PathVariable UUID id, @RequestBody UserUpdateDto dto) {
         User updated = userService.updateUser(id, dto);
         return ResponseEntity.ok(new UserUpdateResponseDto(updated.getId(), updated.getUsername(), updated.getRole(), updated.getAuthorities()));
     }
 
+    @Operation(summary = "Deletar usuário por ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);

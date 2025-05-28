@@ -1,4 +1,6 @@
 package com.petexpress.israel.dto.request;
 
-public record TaskTypeRequestDo() {
-}
+public record TaskTypeRequestDto(
+        String name,
+        String description
+) {}

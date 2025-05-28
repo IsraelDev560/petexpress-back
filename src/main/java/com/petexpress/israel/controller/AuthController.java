@@ -6,11 +6,15 @@ import com.petexpress.israel.dto.res.AuthResponseDto;
 import com.petexpress.israel.dto.res.RegisterResponseDto;
 import com.petexpress.israel.entities.User;
 import com.petexpress.israel.exceptions.ErrorResponseDto;
+import com.petexpress.israel.exceptions.GlobalExceptionHandler;
 import com.petexpress.israel.exceptions.UserExceptions;
 import com.petexpress.israel.repository.UserRepository;
 import com.petexpress.israel.security.SecurityConfig;
 import com.petexpress.israel.service.TokenService;
+import com.petexpress.israel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,15 +46,32 @@ public class AuthController {
     private UserRepository repository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TokenService tokenService;
 
     @Operation(description = "Essa rota efetua o login do usuario.", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deve retornar um token de autenticação."),
-            @ApiResponse(responseCode = "403", description = "Token inválido ou usuário inexistente.")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Deve retornar um token de autenticação.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário ou senha inválidos.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequestDto data){
+    public ResponseEntity<AuthResponseDto> login(@RequestBody @Valid AuthenticationRequestDto data){
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -64,10 +85,10 @@ public class AuthController {
     })
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto data){
-        if(this.repository.findByUsername(data.username()) != null) return ResponseEntity.badRequest().build();
+        if(this.repository.findByUsername(data.username()) != null) return ResponseEntity.status(HttpStatus.CONFLICT).build();
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.username(), encryptedPassword, data.role());
-        this.repository.save(newUser);
+        this.userService.createUser(newUser);
         return ResponseEntity.ok(new RegisterResponseDto(newUser.getUsername(), newUser.getRole()));
     }
 }
