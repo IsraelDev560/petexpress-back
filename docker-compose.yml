@@ -1,0 +1,13 @@
+services:
+  api:
+    container_name: api-petexpress
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - .env

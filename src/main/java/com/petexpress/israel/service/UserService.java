@@ -1,5 +1,6 @@
 package com.petexpress.israel.service;
 
+import com.petexpress.israel.dto.res.UserResponseDto;
 import com.petexpress.israel.dto.update.UserUpdateDto;
 import com.petexpress.israel.entities.User;
 import com.petexpress.israel.exceptions.UserExceptions;
@@ -9,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -18,17 +19,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) {
-//        if (this.userRepository.findByUsername(user.getUsername()).) {
-//            throw new UserExceptions.ResourceAlreadyExistsException(
-//                    "Usuário com username já cadastrado."
-//            );
-//        }
-        return userRepository.save(user);
+    public UserResponseDto createUser(User data) {
+        if (this.userRepository.findByUsername(data.getUsername()) != null) {
+            throw new UserExceptions.ResourceAlreadyExistsException(
+                    "Usuário com username já cadastrado."
+            );
+        }
+        userRepository.save(data);
+        return new UserResponseDto(data.getId(), data.getUsername(), data.getRole(), data.isEnabled());
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrada com ID: " + id));
+    }
+
+    public UserResponseDto getUserByUsername(String username){
+        User user = (User) userRepository.findByUsername(username);
+        return  new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled());
     }
 
     public List<User> getAllUsers() {

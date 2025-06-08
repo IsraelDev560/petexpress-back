@@ -1,9 +1,12 @@
 package com.petexpress.israel.dto.update;
 
-import lombok.Data;
+import com.petexpress.israel.entities.Animal;
 
-@Data
-public class TaskUpdateDto {
+import java.time.LocalDate;
+import java.util.UUID;
 
-    private String task;
-}
+public record TaskUpdateDto(
+        UUID taskTypeId,
+        UUID animalId,
+        LocalDate date
+) {}

@@ -1,4 +1,4 @@
 package com.petexpress.israel.dto.request;
 
-public class AnimalRequestDto {
+public record AnimalRequestDto(String name, String specie) {
 }

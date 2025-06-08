@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.petexpress.israel.entities.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,6 +25,9 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("petexpress-api")
                     .withSubject(user.getUsername())
+                    .withClaim("authorities", user.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .toList())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;
