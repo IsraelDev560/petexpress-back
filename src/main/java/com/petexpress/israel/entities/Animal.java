@@ -1,5 +1,6 @@
 package com.petexpress.israel.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -30,7 +31,7 @@ public class Animal {
     @NotBlank
     @Column(nullable = false)
     private String specie;
-
+    @JsonBackReference
     @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 }

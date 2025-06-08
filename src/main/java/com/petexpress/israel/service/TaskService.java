@@ -11,7 +11,9 @@ import com.petexpress.israel.repository.TaskRepository;
 import com.petexpress.israel.repository.TaskTypeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -43,11 +45,9 @@ public class TaskService {
 
     public TaskResponseDto createTask(TaskRequestDto dto) {
         TaskType type = taskTypeRepository.findByName(dto.taskTypeName())
-                .orElseThrow(() -> new RuntimeException("TaskType não encontrado"));
-        System.out.println("Tipo de task:" + type);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tipo de task não encontrado"));
         Animal animal = animalRepository.findById(dto.animalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
-        System.out.println("Animal:" + animal);
         Task task = new Task();
         task.setTaskType(type);
         task.setAnimal(animal);
