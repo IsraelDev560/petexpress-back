@@ -45,9 +45,9 @@ public class AnimalService {
         return animalRepository.save(animal);
     }
 
-
-    public Animal getAnimalById(UUID id) {
-        return animalRepository.getById(id);
+    public AnimalResponseDto getAnimalById(UUID id) {
+        Animal animal = animalRepository.findById(id).orElseThrow(() -> new RuntimeException("Animal não encontrado com ID:" + id));
+        return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getSpecie());
     }
 
     @Transactional

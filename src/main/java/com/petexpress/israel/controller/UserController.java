@@ -13,8 +13,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +36,7 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         var users = userService.getAllUsers()
                 .stream()
-                .map(user -> new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.getAuthorities(), user.isEnabled()))
+                .map(user -> new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled()))
                 .toList();
         return ResponseEntity.ok(users);
     }
@@ -45,14 +49,21 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id) {
         User user = userService.getUserById(id);
-        return ResponseEntity.ok(new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.getAuthorities(), user.isEnabled()));
+        return ResponseEntity.ok(new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled()));
+    }
+
+    @GetMapping("/myinfo")
+    public ResponseEntity<UserResponseDto> getMyInfo(@AuthenticationPrincipal UserDetails userDetails){
+        UserResponseDto user = userService.getUserByUsername(userDetails.getUsername());
+        return ResponseEntity.ok( new UserResponseDto(user.id(), user.username(), user.role(), user.enabled()));
+
     }
 
     @Operation(summary = "Atualizar um usuário por ID")
     @PatchMapping("/{id}")
     public ResponseEntity<UserUpdateResponseDto> updateUser(@PathVariable UUID id, @RequestBody UserUpdateDto dto) {
         User updated = userService.updateUser(id, dto);
-        return ResponseEntity.ok(new UserUpdateResponseDto(updated.getId(), updated.getUsername(), updated.getRole(), updated.getAuthorities()));
+        return ResponseEntity.ok(new UserUpdateResponseDto(updated.getId(), updated.getUsername(), updated.getRole(), (ArrayList<? extends GrantedAuthority>) updated.getAuthorities()));
     }
 
     @Operation(summary = "Deletar usuário por ID")

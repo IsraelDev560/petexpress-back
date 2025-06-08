@@ -19,17 +19,23 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User data) {
+    public UserResponseDto createUser(User data) {
         if (this.userRepository.findByUsername(data.getUsername()) != null) {
             throw new UserExceptions.ResourceAlreadyExistsException(
                     "Usuário com username já cadastrado."
             );
         }
-        return userRepository.save(data);
+        userRepository.save(data);
+        return new UserResponseDto(data.getId(), data.getUsername(), data.getRole(), data.isEnabled());
     }
 
     public User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrada com ID: " + id));
+    }
+
+    public UserResponseDto getUserByUsername(String username){
+        User user = (User) userRepository.findByUsername(username);
+        return  new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled());
     }
 
     public List<User> getAllUsers() {

@@ -5,7 +5,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record TaskRequestDto(
-        UUID taskTypeId,
+        String taskTypeName,
         UUID animalId,
+        String description,
         LocalDate date
 ) {}

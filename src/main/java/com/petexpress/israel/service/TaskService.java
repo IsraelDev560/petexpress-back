@@ -42,15 +42,16 @@ public class TaskService {
     }
 
     public TaskResponseDto createTask(TaskRequestDto dto) {
-        TaskType type = taskTypeRepository.findById(dto.taskTypeId())
+        TaskType type = taskTypeRepository.findByName(dto.taskTypeName())
                 .orElseThrow(() -> new RuntimeException("TaskType não encontrado"));
-
+        System.out.println("Tipo de task:" + type);
         Animal animal = animalRepository.findById(dto.animalId())
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
-
+        System.out.println("Animal:" + animal);
         Task task = new Task();
         task.setTaskType(type);
         task.setAnimal(animal);
+        task.setDescription(dto.description());
         task.setDate(dto.date());
 
         Task saved = taskRepository.save(task);
@@ -109,7 +110,6 @@ public class TaskService {
         );
     }
 
-    // 🔥 Deletar uma task
     public void deleteTask(UUID id) {
         if (!taskRepository.existsById(id)) {
             throw new RuntimeException("Task não encontrada com ID: " + id);

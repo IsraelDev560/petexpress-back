@@ -71,11 +71,11 @@ public class AuthController {
             )
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthResponseDto> login(@RequestBody @Valid AuthenticationRequestDto data){
-            var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
-            var auth = this.authenticationManager.authenticate(usernamePassword);
-            var token = tokenService.generateToken((User) auth.getPrincipal());
-            return ResponseEntity.ok(new AuthResponseDto(token));
+    public ResponseEntity<AuthResponseDto> login(@RequestBody @Valid AuthenticationRequestDto data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new AuthResponseDto(token));
     }
 
     @Operation(description = "Essa rota efetua um registro de usuário.", method = "POST")
@@ -84,11 +84,22 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Token inválido ou o usuário não possui permissão para criar outro usuário.")
     })
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto data){
-        if(this.repository.findByUsername(data.username()) != null) return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.username(), encryptedPassword, data.role());
-        this.userService.createUser(newUser);
-        return ResponseEntity.ok(new RegisterResponseDto(newUser.getUsername(), newUser.getRole()));
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto data) {
+        System.out.println("Entrou no método /register");
+        try {
+            if (this.repository.findByUsername(data.username()) != null)
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            System.out.println("Criando novo usuário...");
+
+            String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+            User newUser = new User(data.username(), encryptedPassword, data.role());
+            this.userService.createUser(newUser);
+            System.out.println("Usuário criado!");
+
+            return ResponseEntity.ok(new RegisterResponseDto(newUser.getUsername(), newUser.getRole()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
