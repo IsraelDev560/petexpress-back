@@ -85,16 +85,13 @@ public class AuthController {
     })
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto data) {
-        System.out.println("Entrou no método /register");
         try {
             if (this.repository.findByUsername(data.username()) != null)
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            System.out.println("Criando novo usuário...");
 
             String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
             User newUser = new User(data.username(), encryptedPassword, data.role());
             this.userService.createUser(newUser);
-            System.out.println("Usuário criado!");
 
             return ResponseEntity.ok(new RegisterResponseDto(newUser.getUsername(), newUser.getRole()));
         } catch (Exception e) {
