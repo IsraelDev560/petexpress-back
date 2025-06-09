@@ -7,8 +7,10 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - DATABASE_URL=jdbc:postgresql://db:5432/petexpress
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
-      - DATABASE_URL=${DATABASE_URL}
     env_file:
       - .env
     depends_on:
@@ -16,7 +18,7 @@ services:
 
   postgres:
     container_name: db_petexpress
-    image: postgres:15
+    image: postgres:16
     restart: always
     ports:
       - "5432:5432"
@@ -25,6 +27,6 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
 volumes:
-  pgdata:
+  pg-data:
