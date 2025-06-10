@@ -31,9 +31,13 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
    ./mvnw spring-boot:run
    ```
    The API will be available on `http://localhost:8080`.
-4. You can also build a container and start it using Docker Compose:
+4. You can also build a container and start it using Docker Compose (requires the variables above):
    ```bash
    docker compose up --build
+   ```
+5. If you want to run a local PostgreSQL instance together with the API, use `docker-compose-local.yml`:
+   ```bash
+   docker compose -f docker-compose-local.yml up --build
    ```
 
 ### Folder structure
@@ -88,10 +92,14 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
    ./mvnw spring-boot:run
    ```
    A API ficará acessível em `http://localhost:8080`.
-4. Caso prefira, use Docker Compose para gerar a imagem e executar:
+4. Caso prefira, use Docker Compose para gerar a imagem e executar (é preciso definir as variáveis acima):
    ```bash
    docker compose up --build
    ```
+5. Para rodar um PostgreSQL local junto com a API, utilize `docker-compose-local.yml`:
+   ```bash
+   docker compose -f docker-compose-local.yml up --build
+   ``
 
 ### Estrutura de pastas
 - `controller/` – controladores REST para autenticação, animais, tarefas, tipos de tarefa e usuários.
