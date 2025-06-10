@@ -16,10 +16,10 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/IsraelDev560/petexpress-back/tree/main>
    cd petexpress-back
    ```
-2. Create an `.env` file in the project root with your database credentials and JWT secret:
+2. Create an `.env.local` file in the project root with your database credentials and JWT secret:
    ```env
    DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
    DATABASE_USER=postgres
@@ -59,7 +59,7 @@ Most routes require a valid Bearer token obtained from `POST /auth/login`.
 - `GET /task-types`, `POST /task-types`, `GET /task-types/{id}`, `PUT /task-types/{id}`, `DELETE /task-types/{id}`
 - `GET /users`, `GET /users/{id}`, `GET /users/myinfo`, `PATCH /users/{id}`, `DELETE /users/{id}`
 
-Swagger documentation is available at `/swagger-ui.html`.
+Swagger documentation is available at `/swagger-ui/index.html`.
 
 ---
 
@@ -77,10 +77,10 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 ### Configuração
 1. Clone o repositório:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/IsraelDev560/petexpress-back/tree/main>
    cd petexpress-back
    ```
-2. Crie um arquivo `.env` na raiz com as variáveis de ambiente:
+2. Crie um arquivo `.env.local` na raiz com as variáveis de ambiente:
    ```env
    DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
    DATABASE_USER=postgres
@@ -120,4 +120,4 @@ A maioria das rotas requer um token Bearer obtido em `POST /auth/login`.
 - `GET /task-types`, `POST /task-types`, `GET /task-types/{id}`, `PUT /task-types/{id}`, `DELETE /task-types/{id}`
 - `GET /users`, `GET /users/{id}`, `GET /users/myinfo`, `PATCH /users/{id}`, `DELETE /users/{id}`
 
-A documentação Swagger fica disponível em `/swagger-ui.html`.
+A documentação Swagger fica disponível em `/swagger-ui/index.html`.
