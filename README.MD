@@ -16,7 +16,7 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone <https://github.com/IsraelDev560/petexpress-back/tree/main>
+   git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
 2. Create an `.env.local` file in the project root with your database credentials and JWT secret:
@@ -39,6 +39,48 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
    ```bash
    docker compose -f docker-compose-local.yml up --build
    ```
+
+### 🧑‍💻 How to create an ADMIN user in the database
+
+After running the containers with `docker-compose up`, follow the steps below to access the PostgreSQL container and manually insert an admin user into the `users` table.
+
+#### 1. Access the PostgreSQL container
+
+```bash
+docker exec -it db_petexpress psql -U postgres -d petexpress
+```
+
+> This will open the interactive PostgreSQL terminal inside the container.
+
+#### 2. Insert the ADMIN user
+
+Run the following SQL command inside the PostgreSQL terminal:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+INSERT INTO users (id, username, password, role)
+VALUES (
+  gen_random_uuid(),
+  'Admin',
+  crypt('Admin@123', gen_salt('bf')),
+  'ADMIN'
+);
+```
+
+> This password is the Bcrypt hash of `Admin@123`.
+
+#### 3. Check if it was created
+
+```sql
+SELECT id, username, role FROM users;
+```
+
+#### ✅ Test login
+
+- **Username:** `Admin`
+- **Password:** `Admin@123`
+
+You can now authenticate using `POST /auth/login` to obtain a JWT token and access protected routes.
 
 ### Folder structure
 - `controller/` – REST controllers for authentication, animals, tasks, task types and users.
@@ -77,7 +119,7 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 ### Configuração
 1. Clone o repositório:
    ```bash
-   git clone <https://github.com/IsraelDev560/petexpress-back/tree/main>
+   git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
 2. Crie um arquivo `.env.local` na raiz com as variáveis de ambiente:
@@ -99,7 +141,49 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 5. Para rodar um PostgreSQL local junto com a API, utilize `docker-compose-local.yml`:
    ```bash
    docker compose -f docker-compose-local.yml up --build
-   ``
+   ```
+
+### 🧑‍💻 Como criar um usuário ADMIN no banco de dados
+
+Após rodar os containers com `docker-compose up`, siga os passos abaixo para acessar o container do PostgreSQL e inserir manualmente um usuário com perfil ADMIN na tabela `users`.
+
+#### 1. Acesse o container do PostgreSQL
+
+```bash
+docker exec -it db_petexpress psql -U postgres -d petexpress
+```
+
+> Isso abrirá o terminal interativo do PostgreSQL dentro do container.
+
+#### 2. Insira o usuário ADMIN
+
+Execute o comando SQL abaixo dentro do terminal do PostgreSQL:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+INSERT INTO users (id, username, password, role)
+VALUES (
+  gen_random_uuid(),
+  'Admin',
+  crypt('Admin@123', gen_salt('bf')),
+  'ADMIN'
+);
+```
+
+> A senha salva será `Admin@123`, protegida com hash Bcrypt.
+
+#### 3. Verifique se foi criado corretamente
+
+```sql
+SELECT id, username, role FROM users;
+```
+
+#### ✅ Teste de login
+
+- **Usuário:** `Admin`
+- **Senha:** `Admin@123`
+
+Agora você já pode se autenticar usando o endpoint `POST /auth/login` para obter um token JWT e acessar as rotas protegidas.
 
 ### Estrutura de pastas
 - `controller/` – controladores REST para autenticação, animais, tarefas, tipos de tarefa e usuários.
