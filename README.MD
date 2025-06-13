@@ -132,20 +132,20 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
    cd petexpress-back
    ```
 2. Crie dois arquivos de variáveis de ambiente na raiz do projeto:
-   - `.env` com os valores padrão:
-     ```env
-     DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
-     DATABASE_USER=postgres
-     DATABASE_PASSWORD=postgres
-     JWT_SECRET=sua-chave
-     ```
-   - `.env.dev` com as variáveis usadas quando o perfil `dev` estiver ativo:
-     ```env
-     DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
-     DATABASE_USER_DEV=postgres
-     DATABASE_PASSWORD_DEV=postgres
-     JWT_SECRET=sua-chave
-     ```
+- `.env` com os valores padrão:
+  ```env
+  DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+  DATABASE_USER=postgres
+  DATABASE_PASSWORD=postgres
+  JWT_SECRET=sua-chave
+  ```
+- `.env.dev` com as variáveis usadas quando o perfil `dev` estiver ativo:
+  ```env
+  DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
+  DATABASE_USER_DEV=postgres
+  DATABASE_PASSWORD_DEV=postgres
+  JWT_SECRET=sua-chave
+  ```
 3. Inicie a aplicação:
    ```bash
    ./mvnw spring-boot:run
