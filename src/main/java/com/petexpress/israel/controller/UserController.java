@@ -52,6 +52,7 @@ public class UserController {
         return ResponseEntity.ok(new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled()));
     }
 
+    @Operation(summary = "Obter informações do própio usuário")
     @GetMapping("/myinfo")
     public ResponseEntity<UserResponseDto> getMyInfo(@AuthenticationPrincipal UserDetails userDetails){
         UserResponseDto user = userService.getUserByUsername(userDetails.getUsername());

@@ -51,7 +51,7 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    @Operation(description = "Essa rota efetua o login do usuario.", method = "POST")
+    @Operation(summary = "Fazer login", description = "Essa rota efetua o login do usuario.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -78,10 +78,25 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponseDto(token));
     }
 
-    @Operation(description = "Essa rota efetua um registro de usuário.", method = "POST")
+    @Operation(summary = "Registrar um novo usuário", description = "Essa rota efetua um registro de usuário.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deve retornar uma resposta em JSON, com as informações do usuario criado."),
-            @ApiResponse(responseCode = "403", description = "Token inválido ou o usuário não possui permissão para criar outro usuário.")
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Token inválido ou usuário não possui permissão para criar outro usuário.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário ou senha inválida",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
     })
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto data) {
