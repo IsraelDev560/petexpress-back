@@ -19,13 +19,21 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
-2. Create an `.env.local` file in the project root with your database credentials and JWT secret:
-   ```env
-   DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
-   DATABASE_USER=postgres
-   DATABASE_PASSWORD=postgres
-   JWT_SECRET=your-secret
-   ```
+2.  Create two environment files in the project root:
+- `.env` with the values used in the standard profile:
+  ```env
+  DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+  DATABASE_USER=postgres
+  DATABASE_PASSWORD=postgres
+  JWT_SECRET=your-secret
+  ```
+- `.env.dev` with the variables used when the `dev` profile is active:
+  ```env
+  DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
+  DATABASE_USER_DEV=postgres
+  DATABASE_PASSWORD_DEV=postgres
+  JWT_SECRET=your-secret
+  ```
 3. Run the application:
    ```bash
    ./mvnw spring-boot:run
@@ -39,6 +47,7 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
    ```bash
    docker compose -f docker-compose-local.yml up --build
    ```
+6. SQL migration files can be found under `src/main/resources/db/migration`. Flyway is not yet enabled, so they are only references for now.
 
 ### 🧑‍💻 How to create an ADMIN user in the database
 
@@ -122,13 +131,21 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
-2. Crie um arquivo `.env.local` na raiz com as variáveis de ambiente:
-   ```env
-   DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
-   DATABASE_USER=postgres
-   DATABASE_PASSWORD=postgres
-   JWT_SECRET=sua-chave
-   ```
+2. Crie dois arquivos de variáveis de ambiente na raiz do projeto:
+   - `.env` com os valores padrão:
+     ```env
+     DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+     DATABASE_USER=postgres
+     DATABASE_PASSWORD=postgres
+     JWT_SECRET=sua-chave
+     ```
+   - `.env.dev` com as variáveis usadas quando o perfil `dev` estiver ativo:
+     ```env
+     DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
+     DATABASE_USER_DEV=postgres
+     DATABASE_PASSWORD_DEV=postgres
+     JWT_SECRET=sua-chave
+     ```
 3. Inicie a aplicação:
    ```bash
    ./mvnw spring-boot:run
@@ -142,6 +159,8 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
    ```bash
    docker compose -f docker-compose-local.yml up --build
    ```
+
+6. Os scripts de migração SQL estão em `src/main/resources/db/migration`. O Flyway ainda não está habilitado, portanto eles servem apenas de referência.
 
 ### 🧑‍💻 Como criar um usuário ADMIN no banco de dados
 
