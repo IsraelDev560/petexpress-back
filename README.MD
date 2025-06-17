@@ -5,7 +5,7 @@ A Spring Boot 3 project built with Java 21 for the final college assignment at U
 ## 🇺🇸 English
 
 ### [Deploy](https://petexpress-back.onrender.com)
-This API is currently running at: <https://petexpress-back.onrender.com>.
+This API is currently running at: https://petexpress-back.onrender.com.
 The PostgreSQL database is hosted on [Neon](https://neon.tech/).
 
 ### Requirements
@@ -15,39 +15,77 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
 
 ### Setup
 1. Clone the repository:
-   ```bash
+```bash
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
-   ```
-2.  Create two environment files in the project root:
-- `.env` with the values used in the standard profile:
-  ```env
-  DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
-  DATABASE_USER=postgres
-  DATABASE_PASSWORD=postgres
-  JWT_SECRET=your-secret
-  ```
-- `.env.dev` with the variables used when the `dev` profile is active:
-  ```env
-  DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
-  DATABASE_USER_DEV=postgres
-  DATABASE_PASSWORD_DEV=postgres
-  JWT_SECRET=your-secret
-  ```
-3. Run the application:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-   The API will be available on `http://localhost:8080`.
-4. You can also build a container and start it using Docker Compose (requires the variables above):
-   ```bash
-   docker compose up --build
-   ```
-5. If you want to run a local PostgreSQL instance together with the API, use `docker-compose-local.yml`:
-   ```bash
-   docker compose -f docker-compose-local.yml up --build
-   ```
-6. SQL migration files can be found under `src/main/resources/db/migration`. Flyway is not yet enabled, so they are only references for now.
+```
+
+### 🔐 🇺🇸 Generating a secure JWT secret
+
+To secure your authentication system, you need a **strong, random JWT secret**.
+
+#### 1. Generate a 256-bit base64-encoded secret:
+```bash
+openssl rand -base64 32
+```
+
+#### 2. Copy the output and paste it into your `.env` or `.env.docker`:
+```dotenv
+JWT_SECRET=your_generated_secret_here
+```
+
+> Never commit your secret to Git or share it publicly!
+
+### 🇺🇸 Environment Setup
+To run this project, you need **two environment files**: one for **Docker** and another for **local development** using an IDE (e.g. IntelliJ).
+
+2. Copy the example file:
+```bash
+   cp .env.example .env.docker
+   cp .env.example .env
+```
+
+3. Then edit both files:
+
+#### 🐳 For Docker (`.env.docker`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://db_petexpress:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=your_generated_secret_here
+```
+
+#### 🧑‍💻 For local development (`.env`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=your_generated_secret_here
+```
+
+4. **Run the application**:
+- **Docker Compose**:
+```bash
+  docker compose up --build
+```
+The API will be available on `http://localhost:8080`.
+
+### 🐳 Docker Compose
+
+The `docker-compose.yml` includes two services:
+
+- **postgres**: PostgreSQL container with healthcheck and persistent volume.
+- **api-petexpress**: Spring Boot app reading `.env` via `env_file`.
+
+Just run:
+
+```bash
+docker compose up --build
+```
+
+### 📁 Database Migrations
+
+SQL scripts are under `src/main/resources/db/migration`. Flyway will run them on startup.
 
 ### 🧑‍💻 How to create an ADMIN user in the database
 
@@ -117,7 +155,7 @@ Swagger documentation is available at `/swagger-ui/index.html`.
 ## 🇧🇷 Português
 
 ### [Deploy](https://petexpress-back.onrender.com)
-Esta API está hospedada em: <https://petexpress-back.onrender.com>.
+Esta API está hospedada em: https://petexpress-back.onrender.com.
 O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 
 ### Requisitos
@@ -127,40 +165,74 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 
 ### Configuração
 1. Clone o repositório:
-   ```bash
+```bash
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
-   ```
-2. Crie dois arquivos de variáveis de ambiente na raiz do projeto:
-- `.env` com os valores padrão:
-  ```env
-  DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
-  DATABASE_USER=postgres
-  DATABASE_PASSWORD=postgres
-  JWT_SECRET=sua-chave
-  ```
-- `.env.dev` com as variáveis usadas quando o perfil `dev` estiver ativo:
-  ```env
-  DATABASE_URL_DEV=jdbc:postgresql://localhost:5432/petexpress
-  DATABASE_USER_DEV=postgres
-  DATABASE_PASSWORD_DEV=postgres
-  JWT_SECRET=sua-chave
-  ```
-3. Inicie a aplicação:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-   A API ficará acessível em `http://localhost:8080`.
-4. Caso prefira, use Docker Compose para gerar a imagem e executar (é preciso definir as variáveis acima):
-   ```bash
-   docker compose up --build
-   ```
-5. Para rodar um PostgreSQL local junto com a API, utilize `docker-compose-local.yml`:
-   ```bash
-   docker compose -f docker-compose-local.yml up --build
-   ```
+```
 
-6. Os scripts de migração SQL estão em `src/main/resources/db/migration`. O Flyway ainda não está habilitado, portanto eles servem apenas de referência.
+### 🔐 🇧🇷 Gerando uma chave JWT segura
+
+Para proteger o sistema de autenticação, você precisa de uma **chave secreta forte e aleatória**.
+
+#### 1. Gere uma chave de 256 bits codificada em base64:
+```bash
+openssl rand -base64 32
+```
+
+#### 2. Copie o resultado e cole no seu `.env` ou `.env.docker`:
+```dotenv
+JWT_SECRET=sua_chave_gerada_aqui
+```
+
+> Nunca envie sua chave para o Git ou compartilhe com outras pessoas!   
+
+### 🇧🇷 Configuração de Ambiente
+Para executar o projeto, você precisa de **dois arquivos `.env`**: um para rodar via **Docker** e outro para rodar **localmente pela IDE** (como IntelliJ).
+
+2. Copie o arquivo de exemplo:
+```bash
+   cp .env.example .env.docker
+   cp .env.example .env
+```
+
+3. Depois edite os dois arquivos:
+
+#### 🐳 Para Docker (`.env.docker`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://db_petexpress:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=sua_chave_gerada_aqui
+```
+
+#### 🧑‍💻 Para desenvolvimento local (`.env`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=sua_chave_gerada_aqui
+```
+
+4. **Execute**:
+- **Docker Compose**:
+```bash
+  docker compose up --build
+```
+A API ficará em `http://localhost:8080`.
+
+### 🐳 Docker Compose
+
+Use:
+
+```bash
+docker compose up --build
+```
+
+Contém serviços `postgres` e `api-petexpress`.
+
+### 📁 Migrações
+
+Scripts em `src/main/resources/db/migration`. Flyway aplica ao iniciar.
 
 ### 🧑‍💻 Como criar um usuário ADMIN no banco de dados
 
