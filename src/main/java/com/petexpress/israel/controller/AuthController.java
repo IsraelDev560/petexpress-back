@@ -88,14 +88,6 @@ public class AuthController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
                     )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Usuário ou senha inválida",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
             )
     })
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
