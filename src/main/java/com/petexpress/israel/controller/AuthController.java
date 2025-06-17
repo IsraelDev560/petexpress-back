@@ -35,7 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
-@Tag(name = "Auth")
+@Tag(
+        name = "Auth",
+        description = "Endpoints for user authentication, login and registration."
+)
 @SecurityRequirement(name = SecurityConfig.SECURITY)
 public class AuthController {
 
