@@ -20,7 +20,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("task")
-@Tag(name = "Tasks")
+@Tag(
+        name = "Tasks",
+        description = "Endpoints related to the management of tasks assigned to animals. Includes creation, updating, retrieval, and deletion of tasks."
+)
 @SecurityRequirement(name = SecurityConfig.SECURITY)
 public class TaskController {
 
