@@ -7,14 +7,14 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       postgres:
         condition: service_healthy
 
   postgres:
     container_name: db_petexpress
-    image: postgres:15-alpine
+    image: postgres:15.4
     restart: always
     ports:
       - "5432:5432"

@@ -19,28 +19,54 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
-2. **Copy and configure environment file**:
+
+### 🔐 🇺🇸 Generating a secure JWT secret
+
+To secure your authentication system, you need a **strong, random JWT secret**.
+
+#### 1. Generate a 256-bit base64-encoded secret:
+```bash
+openssl rand -base64 32
+```
+
+#### 2. Copy the output and paste it into your `.env` or `.env.docker`:
+```dotenv
+JWT_SECRET=your_generated_secret_here
+```
+
+> Never commit your secret to Git or share it publicly!
+
+### 🇺🇸 Environment Setup
+To run this project, you need **two environment files**: one for **Docker** and another for **local development** using an IDE (e.g. IntelliJ).
+
+2. Copy the example file:
    ```bash
+   cp .env.example .env.docker
    cp .env.example .env
    ```
-   Then edit `.env` with your values:
-   ```dotenv
-   # Database (Dev or Prod): adjust host/port/db credentials
-   DATABASE_URL=jdbc:postgresql://postgres:5432/petexpress
-   DATABASE_USER=postgres
-   DATABASE_PASSWORD=postgres
 
-   # JPA DDL auto (e.g., update, validate, none)
-   DDL_AUTO=update
+3. Then edit both files:
 
-   # JWT secret key
-   JWT_SECRET=your-jwt-secret
-   ```
-3. **Run the application**:
-    - **Docker Compose**:
-      ```bash
-      docker compose up --build
-      ```
+#### 🐳 For Docker (`.env.docker`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://db_petexpress:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=your_generated_secret_here
+```
+
+#### 🧑‍💻 For local development (`.env`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=your_generated_secret_here
+```
+4. **Run the application**:
+- **Docker Compose**:
+  ```bash
+  docker compose up --build
+  ```
 The API will be available on `http://localhost:8080`.
 
 ### 🐳 Docker Compose
@@ -142,23 +168,54 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
    ```
-2. **Copie e configure o arquivo das variaveis de ambiente**:
+
+### 🔐 🇧🇷 Gerando uma chave JWT segura
+
+Para proteger o sistema de autenticação, você precisa de uma **chave secreta forte e aleatória**.
+
+#### 1. Gere uma chave de 256 bits codificada em base64:
+```bash
+openssl rand -base64 32
+```
+
+#### 2. Copie o resultado e cole no seu `.env` ou `.env.docker`:
+```dotenv
+JWT_SECRET=sua_chave_gerada_aqui
+```
+
+> Nunca envie sua chave para o Git ou compartilhe com outras pessoas!   
+
+### 🇧🇷 Configuração de Ambiente
+Para executar o projeto, você precisa de **dois arquivos `.env`**: um para rodar via **Docker** e outro para rodar **localmente pela IDE** (como IntelliJ).
+
+2. Copie o arquivo de exemplo:
    ```bash
+   cp .env.example .env.docker
    cp .env.example .env
    ```
-   No `.env`, defina:
-   ```dotenv
-   DATABASE_URL=jdbc:postgresql://postgres:5432/petexpress
-   DATABASE_USER=postgres
-   DATABASE_PASSWORD=postgres
-   DDL_AUTO=update
-   JWT_SECRET=sua-jwt-secret
-   ```
-3. **Execute**:
-    - **Docker Compose**:
-      ```bash
-      docker compose up --build
-      ```
+
+3. Depois edite os dois arquivos:
+
+#### 🐳 Para Docker (`.env.docker`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://db_petexpress:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=sua_chave_gerada_aqui
+```
+
+#### 🧑‍💻 Para desenvolvimento local (`.env`)
+```dotenv
+DATABASE_URL=jdbc:postgresql://localhost:5432/petexpress
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+JWT_SECRET=sua_chave_gerada_aqui
+```
+4. **Execute**:
+- **Docker Compose**:
+  ```bash
+  docker compose up --build
+  ```
 A API ficará em `http://localhost:8080`.
 
 ### 🐳 Docker Compose
