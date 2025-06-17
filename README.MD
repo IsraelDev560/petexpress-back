@@ -15,10 +15,10 @@ The PostgreSQL database is hosted on [Neon](https://neon.tech/).
 
 ### Setup
 1. Clone the repository:
-   ```bash
+```bash
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
-   ```
+```
 
 ### 🔐 🇺🇸 Generating a secure JWT secret
 
@@ -40,10 +40,10 @@ JWT_SECRET=your_generated_secret_here
 To run this project, you need **two environment files**: one for **Docker** and another for **local development** using an IDE (e.g. IntelliJ).
 
 2. Copy the example file:
-   ```bash
+```bash
    cp .env.example .env.docker
    cp .env.example .env
-   ```
+```
 
 3. Then edit both files:
 
@@ -62,11 +62,12 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 JWT_SECRET=your_generated_secret_here
 ```
+
 4. **Run the application**:
 - **Docker Compose**:
-  ```bash
+```bash
   docker compose up --build
-  ```
+```
 The API will be available on `http://localhost:8080`.
 
 ### 🐳 Docker Compose
@@ -164,10 +165,10 @@ O banco de dados PostgreSQL fica no [Neon](https://neon.tech/).
 
 ### Configuração
 1. Clone o repositório:
-   ```bash
+```bash
    git clone https://github.com/IsraelDev560/petexpress-back.git
    cd petexpress-back
-   ```
+```
 
 ### 🔐 🇧🇷 Gerando uma chave JWT segura
 
@@ -189,10 +190,10 @@ JWT_SECRET=sua_chave_gerada_aqui
 Para executar o projeto, você precisa de **dois arquivos `.env`**: um para rodar via **Docker** e outro para rodar **localmente pela IDE** (como IntelliJ).
 
 2. Copie o arquivo de exemplo:
-   ```bash
+```bash
    cp .env.example .env.docker
    cp .env.example .env
-   ```
+```
 
 3. Depois edite os dois arquivos:
 
@@ -211,11 +212,12 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 JWT_SECRET=sua_chave_gerada_aqui
 ```
+
 4. **Execute**:
 - **Docker Compose**:
-  ```bash
+```bash
   docker compose up --build
-  ```
+```
 A API ficará em `http://localhost:8080`.
 
 ### 🐳 Docker Compose
