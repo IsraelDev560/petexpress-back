@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(org.springframework.security.core.userdetails.UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> usernameNotFoundException(org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
-        var error = new ErrorResponseDto(401, "Usuário ou senha inválidos.", timestamp());
+        var error = new ErrorResponseDto(401, "Invalid username or password.", timestamp());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
@@ -42,20 +42,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             org.springframework.security.authentication.BadCredentialsException.class
     })
     public ResponseEntity<ErrorResponseDto> authenticationException(Exception ex) {
-        logger.error("Erro de autenticação", ex);
-        var error = new ErrorResponseDto(401, "Usuário ou senha inválidos.", timestamp());
+        logger.error("Authentication error", ex);
+        var error = new ErrorResponseDto(401, "Invalid username or password.", timestamp());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(JWTVerificationException.class)
     public ResponseEntity<ErrorResponseDto> jwtVerificationException(JWTVerificationException ex) {
-        var error = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Token inválido ou expirado.", timestamp());
+        var error = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Invalid or expired token.", timestamp());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> genericException(Exception ex) {
-        var error = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Erro interno do servidor.", timestamp());
+        var error = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error.", timestamp());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

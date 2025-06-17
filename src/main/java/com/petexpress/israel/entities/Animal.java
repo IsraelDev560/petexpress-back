@@ -24,7 +24,7 @@ public class Animal {
     private UUID id;
 
     @NotBlank
-    @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
+    @Size(min = 3, message = "Name must contain at least 3 characters")
     @Column(nullable = false)
     private String name;
 
