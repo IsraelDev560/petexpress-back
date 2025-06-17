@@ -32,12 +32,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, message = "Username must be at least 3 characters long")
     @Column(nullable = false)
     private String username;
 
-    @NotBlank(message = "Senha é obrigatória")
+    @NotBlank(message = "Password is required")
     @Column(nullable = false)
     private String password;
 

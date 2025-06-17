@@ -34,7 +34,7 @@ public class AnimalService {
     public Animal createAnimal(AnimalRequestDto dto) {
         if (animalRepository.findByName(dto.name()).isPresent()) {
             throw new UserExceptions.ResourceAlreadyExistsException(
-                    "Animal com nome já cadastrado."
+                    "An animal with this name is already registered."
             );
         }
 
@@ -46,7 +46,7 @@ public class AnimalService {
     }
 
     public AnimalResponseDto getAnimalById(UUID id) {
-        Animal animal = animalRepository.findById(id).orElseThrow(() -> new RuntimeException("Animal não encontrado com ID:" + id));
+        Animal animal = animalRepository.findById(id).orElseThrow(() -> new RuntimeException("Animal not found with ID:" + id));
         return new AnimalResponseDto(animal.getId(), animal.getName(), animal.getSpecie());
     }
 

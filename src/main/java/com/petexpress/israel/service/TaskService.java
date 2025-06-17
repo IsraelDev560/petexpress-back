@@ -45,9 +45,9 @@ public class TaskService {
 
     public TaskResponseDto createTask(TaskRequestDto dto) {
         TaskType type = taskTypeRepository.findByName(dto.taskTypeName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tipo de task não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task Type not found"));
         Animal animal = animalRepository.findById(dto.animalId())
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Animal not found"));
         Task task = new Task();
         task.setTaskType(type);
         task.setAnimal(animal);
@@ -69,7 +69,7 @@ public class TaskService {
 
     public TaskResponseDto getTaskById(UUID id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task não encontrada com ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
 
         return new TaskResponseDto(
                 task.getId(),
@@ -85,13 +85,13 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTask(UUID id, TaskUpdateDto dto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task não encontrada com ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
 
         TaskType type = taskTypeRepository.findById(dto.taskTypeId())
-                .orElseThrow(() -> new RuntimeException("TaskType não encontrado"));
+                .orElseThrow(() -> new RuntimeException("TaskType not found"));
 
         Animal animal = animalRepository.findById(dto.animalId())
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Animal not found"));
 
         task.setTaskType(type);
         task.setAnimal(animal);
@@ -112,7 +112,7 @@ public class TaskService {
 
     public void deleteTask(UUID id) {
         if (!taskRepository.existsById(id)) {
-            throw new RuntimeException("Task não encontrada com ID: " + id);
+            throw new RuntimeException("Task not found with ID: " + id);
         }
         taskRepository.deleteById(id);
     }

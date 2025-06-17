@@ -18,6 +18,6 @@ public class AuthorizationService implements UserDetailsService {
         if(userRepository.findByUsername(username) != null){
             return userRepository.findByUsername(username);
         }
-        throw new UsernameNotFoundException("Esse usuario não existe.");
+        throw new UsernameNotFoundException("This user do not exist.");
     }
 }

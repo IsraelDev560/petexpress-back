@@ -24,14 +24,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("users")
-@Tag(name = "Users")
+@Tag(name = "Users", description = "Manage user accounts and permissions")
 @SecurityRequirement(name = SecurityConfig.SECURITY)
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Operation(summary = "Buscar todos usuários")
+    @Operation(summary = "Get all users", description = "Returns a list of all registered users.")
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         var users = userService.getAllUsers()
@@ -41,10 +41,10 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @Operation(summary = "Buscar usuário por ID")
+    @Operation(summary = "Get user by ID", description = "Fetch a specific user by their unique identifier.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+            @ApiResponse(responseCode = "200", description = "User found"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable UUID id) {
@@ -52,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok(new UserResponseDto(user.getId(), user.getUsername(), user.getRole(), user.isEnabled()));
     }
 
-    @Operation(summary = "Obter informações do própio usuário")
+    @Operation(summary = "Get information about the authenticated user", description = "Returns details about the currently authenticated user.")
     @GetMapping("/myinfo")
     public ResponseEntity<UserResponseDto> getMyInfo(@AuthenticationPrincipal UserDetails userDetails){
         UserResponseDto user = userService.getUserByUsername(userDetails.getUsername());
@@ -60,14 +60,14 @@ public class UserController {
 
     }
 
-    @Operation(summary = "Atualizar um usuário por ID")
+    @Operation(summary = "Update user by ID", description = "Partially updates a user's information using their ID.")
     @PatchMapping("/{id}")
     public ResponseEntity<UserUpdateResponseDto> updateUser(@PathVariable UUID id, @RequestBody UserUpdateDto dto) {
         User updated = userService.updateUser(id, dto);
         return ResponseEntity.ok(new UserUpdateResponseDto(updated.getId(), updated.getUsername(), updated.getRole(), (ArrayList<? extends GrantedAuthority>) updated.getAuthorities()));
     }
 
-    @Operation(summary = "Deletar usuário por ID")
+    @Operation(summary = "Delete user by ID", description = "Deletes a user account based on their ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);

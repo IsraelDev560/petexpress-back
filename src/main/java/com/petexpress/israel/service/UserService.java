@@ -22,7 +22,7 @@ public class UserService {
     public UserResponseDto createUser(User data) {
         if (this.userRepository.findByUsername(data.getUsername()) != null) {
             throw new UserExceptions.ResourceAlreadyExistsException(
-                    "Usuário com username já cadastrado."
+                    "User with this username already exists."
             );
         }
         userRepository.save(data);
@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrada com ID: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
 
     public UserResponseDto getUserByUsername(String username){
@@ -50,7 +50,7 @@ public class UserService {
             user.setRole(dto.role());
             return userRepository.save(user);
         } catch (UserExceptions.ResourceNotFoundException exception) {
-            throw new UserExceptions.ResourceNotFoundException("Usuario não encontrado");
+            throw new UserExceptions.ResourceNotFoundException("User not found");
         }
     }
 

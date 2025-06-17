@@ -51,11 +51,11 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    @Operation(summary = "Fazer login", description = "Essa rota efetua o login do usuario.", method = "POST")
+    @Operation(summary = "Login", description = "This route authenticates the user.", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Deve retornar um token de autenticação.",
+                    description = "Returns an authentication token.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = AuthResponseDto.class)
@@ -63,7 +63,7 @@ public class AuthController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Usuário ou senha inválidos.",
+                    description = "Invalid username or password.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
@@ -78,12 +78,15 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponseDto(token));
     }
 
-    @Operation(summary = "Registrar um novo usuário", description = "Essa rota efetua um registro de usuário.", method = "POST")
+    @Operation(summary = "Register a new user", description = "This route registers a new user.", method = "POST")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deve retornar uma resposta em JSON, com as informações do usuario criado."),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Returns a JSON response with the newly created user's information."
+            ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Token inválido ou usuário não possui permissão para criar outro usuário.",
+                    description = "Invalid token or user does not have permission to create another user.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponseDto.class)
