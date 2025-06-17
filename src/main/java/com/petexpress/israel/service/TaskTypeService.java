@@ -18,7 +18,7 @@ public class TaskTypeService {
 
     public TaskTypeResponseDto create(TaskTypeRequestDto dto) {
         if (repository.findByName(dto.name()).isPresent()) {
-            throw new RuntimeException("TaskType já existe com esse nome.");
+            throw new RuntimeException("TaskType with this name already exists.");
         }
 
         TaskType type = new TaskType();
@@ -38,14 +38,14 @@ public class TaskTypeService {
 
     public TaskTypeResponseDto getById(UUID id) {
         TaskType type = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("TaskType não encontrado"));
+                .orElseThrow(() -> new RuntimeException("TaskType not found."));
 
         return new TaskTypeResponseDto(type.getId(), type.getName(), type.getDescription());
     }
 
     public TaskTypeResponseDto update(UUID id, TaskTypeRequestDto dto) {
         TaskType type = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("TaskType não encontrado"));
+                .orElseThrow(() -> new RuntimeException("TaskType not found."));
 
         type.setName(dto.name());
         type.setDescription(dto.description());
@@ -57,7 +57,7 @@ public class TaskTypeService {
 
     public void delete(UUID id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("TaskType não encontrado");
+            throw new RuntimeException("TaskType not found.");
         }
         repository.deleteById(id);
     }

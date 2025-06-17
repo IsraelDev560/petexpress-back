@@ -27,39 +27,39 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @Operation(summary = "Buscar todas as tasks")
+    @Operation(summary = "Fetch all tasks")
     @GetMapping
     public ResponseEntity<List<TaskResponseDto>> getAllTasks(){
         return ResponseEntity.ok(taskService.getAllTasks());
     }
 
-    @Operation(summary = "Adicionar uma task a um animal")
+    @Operation(summary = "Add a task to an animal")
     @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(@RequestBody @Valid TaskRequestDto dto) {
         return ResponseEntity.ok(taskService.createTask(dto));
     }
 
-    @Operation(summary = "Buscar Task por ID")
+    @Operation(summary = "Fetch task by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Task encontrada"),
-            @ApiResponse(responseCode = "404", description = "Task não encontrado")
+            @ApiResponse(responseCode = "200", description = "Task found"),
+            @ApiResponse(responseCode = "404", description = "Task not found")
     })
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDto> getTaskById(@PathVariable UUID id) {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @Operation(summary = "Atualiza Task por ID")
+    @Operation(summary = "Update task by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Task atualizada"),
-            @ApiResponse(responseCode = "404", description = "Task não encontrado")
+            @ApiResponse(responseCode = "200", description = "Task updated"),
+            @ApiResponse(responseCode = "404", description = "Task not found")
     })
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDto> updateTask(@PathVariable UUID id, @RequestBody @Valid TaskUpdateDto dto) {
         return ResponseEntity.ok(taskService.updateTask(id, dto));
     }
 
-    @Operation(summary = "Deletar task por id")
+    @Operation(summary = "Delete task by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTask(id);
